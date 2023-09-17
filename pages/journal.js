@@ -82,8 +82,8 @@ export default function Journal() {
                   
                   // <div>
                     <div className="metric-section" key={index}>
-                      <span class="metric-name">{goal}</span>
-                      <span class="metric-info">some test info about your metric </span>
+                      <span className="metric-name">{goal}</span>
+                      <span className="metric-info">some test info about your metric </span>
                     </div>
 
                   

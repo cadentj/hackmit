@@ -41,12 +41,23 @@ const Goals = () => {
 			<li>Learning about relativity</li>
 			<li>Making $1 million in revenue</li>
 		</ul>
-        <center><input type="text" placeholder="Goal 1" value={goal1} onChange={(e) => setGoal1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Goal 2" value={goal2} onChange={(e) => setGoal2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Goal 3" value={goal3} onChange={(e) => setGoal3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Goal 4" value={goal4} onChange={(e) => setGoal4(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} /><br></br>
-        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', borderRadius: '5px', cursor: 'pointer', fontFamily: 'myfont' }}>Submit</button></center>
+        <center><input type="text" placeholder="Goal 1" value={goal1} onChange={(e) => setGoal1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Goal 2" value={goal2} onChange={(e) => setGoal2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Goal 3" value={goal3} onChange={(e) => setGoal3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px'}} />
+        <input type="text" placeholder="Goal 4" value={goal4} onChange={(e) => setGoal4(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px'}} /><br></br>
+        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer', fontFamily: 'myfont' }}>Submit</button></center>
       </animated.div>
+      <style jsx>{`
+        input, button{
+          border:1px solid black;
+          box-shadow: 3px 3px 3px 0px #888888;
+          margin-top: 10px;
+          padding-left: 10px;
+        }
+        button:hover {
+          box-shadow: 5px 5px 3px 0px #888888;
+        }
+        `}</style>
     </div>
   );
 };

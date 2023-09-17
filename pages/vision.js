@@ -39,11 +39,22 @@ const Vision = () => {
 				<li>Building a happy family</li>
 				<li>Being a famous actor</li>
 			</ul>
-			<center><input type="text" placeholder="Vision 1" value={vision1} onChange={(e) => setVision1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Vision 2" value={vision2} onChange={(e) => setVision2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Vision 3" value={vision3} onChange={(e) => setVision3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} /><br></br>
-        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', borderRadius: '5px', cursor: 'pointer', fontFamily: 'myfont' }}>Submit</button></center>
+			<center><input type="text" placeholder="Vision 1" value={vision1} onChange={(e) => setVision1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Vision 2" value={vision2} onChange={(e) => setVision2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px'}} />
+        <input type="text" placeholder="Vision 3" value={vision3} onChange={(e) => setVision3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} /><br></br>
+        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer', fontFamily: 'myfont' }}>Submit</button></center>
       </animated.div>
+      <style jsx>{`
+        input, button{
+          border:1px solid black;
+          box-shadow: 3px 3px 3px 0px #888888;
+          margin-top: 10px;
+          padding-left: 10px;
+        }
+        button:hover {
+          box-shadow: 5px 5px 3px 0px #888888;
+        }
+        `}</style>
     </div>
   );
 };

@@ -42,12 +42,23 @@ const Attributes = () => {
 			<li>Prioritizing relationships</li>
 			<li>Exercise more</li>
 		</ul>
-        <center><input type="text" placeholder="Attribute 1" value={attribute1} onChange={(e) => setAttribute1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Attribute 2" value={attribute2} onChange={(e) => setAttribute2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Attribute 3" value={attribute3} onChange={(e) => setAttribute3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} />
-        <input type="text" placeholder="Attribute 4" value={attribute4} onChange={(e) => setAttribute4(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px', borderRadius: '5px' }} /><br></br>
-        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', borderRadius: '5px', cursor: 'pointer', fontFamily: 'myfont' }}>Submit. Let's start journaling.</button></center>
+        <center><input type="text" placeholder="Attribute 1" value={attribute1} onChange={(e) => setAttribute1(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Attribute 2" value={attribute2} onChange={(e) => setAttribute2(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Attribute 3" value={attribute3} onChange={(e) => setAttribute3(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} />
+        <input type="text" placeholder="Attribute 4" value={attribute4} onChange={(e) => setAttribute4(e.target.value)} style={{ width: '80%', padding: '10px', margin: '5px' }} /><br></br>
+        <button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer', fontFamily: 'myfont' }}>Submit. Let's start journaling.</button></center>
       </animated.div>
+      <style jsx>{`
+        input, button{
+          border:1px solid black;
+          box-shadow: 3px 3px 3px 0px #888888;
+          margin-top: 10px;
+          padding-left: 10px;
+        }
+        button:hover {
+          box-shadow: 5px 5px 3px 0px #888888;
+        }
+        `}</style>
     </div>
   );
 };
