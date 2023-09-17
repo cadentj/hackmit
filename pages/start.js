@@ -10,7 +10,7 @@ const Start = () => {
   });
 
   const setVisions = () => {
-	window.location.href = '/vision';
+	  window.location.href = '/vision';
   };
 
 

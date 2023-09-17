@@ -14,14 +14,20 @@ const Attributes = () => {
     from: { opacity: 0, marginTop: -500 },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Store attributes in localStorage
     localStorage.setItem('attribute1', attribute1);
     localStorage.setItem('attribute2', attribute2);
     localStorage.setItem('attribute3', attribute3);
     localStorage.setItem('attribute4', attribute4);
     console.log('Attributes submitted:', { attribute1, attribute2, attribute3, attribute4 });
-	window.location.href = '/journal';
+
+    const savedVisions = [localStorage.getItem('vision1'), localStorage.getItem('vision2'), localStorage.getItem('vision3')];
+    const savedGoals = [localStorage.getItem('goal1'), localStorage.getItem('goal2'), localStorage.getItem('goal3'), localStorage.getItem('goal4')];
+    const savedAttributes = [localStorage.getItem('attribute1'), localStorage.getItem('attribute2'), localStorage.getItem('attribute3'), localStorage.getItem('attribute4')];
+
+    await writeGva(savedGoals, savedVisions, savedAttributes);
+	  window.location.href = '/journal';
   };
 
   return (

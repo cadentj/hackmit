@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import axios from 'axios';
+import { writeEntry, writeGva, getDaysListener, getMetricsListener } from './api';
 
 export default function Journal() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -35,15 +35,18 @@ export default function Journal() {
     localStorage.setItem('attributes', JSON.stringify(attributes));
   }, [entries, visions, goals, attributes]);
 
-  const handleDateChange = (date) => {
+  
+
+  const handleDateChange = async (date) => {
     setSelectedDate(date);
     setNewEntry(entries[date.toDateString()] || '');
   };
 
-  const handleSaveEntry = () => {
+  const handleSaveEntry = async () => {
     const updatedEntries = { ...entries };
     updatedEntries[selectedDate.toDateString()] = newEntry;
     setEntries(updatedEntries);
+    await writeEntry(newEntry);
   };
 
   const toggleSection = (section) => {
