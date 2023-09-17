@@ -7,11 +7,11 @@
   body {
 	padding: 0;
 	margin: 0;
-	font-family: 'myfont', sans-serif;
+	font-family: 'myfont';
   }
   input{
-	font-family: 'myfont', sans-serif;
+	font-family: 'myfont';
   }
   input::placeholder{
-	font-family: 'myfont', sans-serif;
+	font-family: 'myfont';
   }
