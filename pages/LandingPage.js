@@ -30,7 +30,7 @@ const LandingPage = () => {
       <animated.div style={{ ...leftProps, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <h1 style={{ fontSize: '4em' }}>Janus</h1>
         <p style={{ fontSize: '1.5em', fontFamily: "myfont" }}>build a better you.</p>
-		<button style={{  fontFamily: "myfont" }} onClick ={startJourney}>Hi Janus, let's get started.</button>
+		<button style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer', fontFamily: 'myfont' }} onClick ={startJourney}>Hi Janus, let's get started.</button>
       </animated.div>
 
       {/* Right Side */}
@@ -41,19 +41,18 @@ const LandingPage = () => {
     </div>
 
 	<style jsx>{`
-		button {
-			padding: 12px 24px;
-			background-color: #ffffff;
-			color: black;
-			border: 1px solid black;
-			border-radius: 4px;
+		button{
+			border:1px solid black;
+			box-shadow: 3px 3px 3px 0px #888888;
+			margin-top: 10px;
+			padding-left: 10px;
 			cursor: pointer;
 			font-size: 1rem;
 			transition: background-color 0.2s ease;
-		}
-		button:hover {
-			background-color: #000000;
-		}
+		  }
+      button:hover {
+        box-shadow: 5px 5px 3px 0px #888888;
+      }
 	`}</style>
 	</div>
   );

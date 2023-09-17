@@ -91,11 +91,13 @@ export default function Journal() {
                 { 
                   goals.filter(goal => goal).map((goal, index) => 
                     <div className="metric-section" key={index}>
+
                       <div>
                        <span className="metric-name">{goal}</span>
                        <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
                       </div>
                       <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+
                     </div>
                   )
                 }
