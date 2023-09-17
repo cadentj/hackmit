@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import { writeEntry, writeGva, getDaysListener, getMetricsListener } from './api';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import axios from "axios";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
@@ -32,16 +33,32 @@ export default function Journal() {
   const user = auth.currentUser;
 
   useEffect(() => {
+    (async () => {
     // Load from localStorage
-    const savedEntries = localStorage.getItem('journalEntries');
-    const savedVisions = [localStorage.getItem('vision1'), localStorage.getItem('vision2'), localStorage.getItem('vision3')];
-    const savedGoals = [localStorage.getItem('goal1'), localStorage.getItem('goal2'), localStorage.getItem('goal3'), localStorage.getItem('goal4')];
-    const savedAttributes = [localStorage.getItem('attribute1'), localStorage.getItem('attribute2'), localStorage.getItem('attribute3'), localStorage.getItem('attribute4')];
+    // const savedEntries = localStorage.getItem('journalEntries');
+    // const savedVisions = [localStorage.getItem('vision1'), localStorage.getItem('vision2'), localStorage.getItem('vision3')];
+    // const savedGoals = [localStorage.getItem('goal1'), localStorage.getItem('goal2'), localStorage.getItem('goal3'), localStorage.getItem('goal4')];
+    // const savedAttributes = [localStorage.getItem('attribute1'), localStorage.getItem('attribute2'), localStorage.getItem('attribute3'), localStorage.getItem('attribute4')];
+    
+    let headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
 
-    if (savedEntries) setEntries(savedEntries);
-    if (savedVisions) setVisions(savedVisions);
-    if (savedGoals) setGoals(savedGoals);
-    if (savedAttributes) setAttributes(savedAttributes);
+      // 'uid': 1
+    }
+    var response = await axios.get('http://localhost:5000/read-metrics/YzcjzTXLDGWaqLcwnufjL1EnvPs2', {headers: headers})
+    console.log("response", response);
+    console.log(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setVisions(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setGoals(response['data']['goals'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setAttributes(response['data']['attributes'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+
+    // var data = {"attributes": {}, }
+    // if (savedEntries) setEntries(savedEntries);
+    // if (savedVisions) setVisions(response['data']['visions']);
+    // if (savedGoals) setGoals(savedGoals);
+    // if (savedAttributes) setAttributes(savedAttributes);
+  })();
   }, []);
 
   useEffect(() => {
@@ -92,7 +109,16 @@ export default function Journal() {
     const updatedEntries = { ...entries };
     updatedEntries[selectedDate.toDateString()] = newEntry;
     setEntries(updatedEntries);
-    await writeEntry(newEntry);
+    var headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    }
+    var data = {
+      'uid': 'YzcjzTXLDGWaqLcwnufjL1EnvPs2',
+      'date': selectedDate.toDateString(),
+      'entry': newEntry
+    }
+    await axios.post('http://localhost:5000/day-entry/', {headers: headers, data: data});
   };
 
   const toggleSection = (section) => {
@@ -123,10 +149,10 @@ export default function Journal() {
                 
                 <div className="metric-section" key={index}>
                   <div>
-                    <span className="metric-name">{vision}</span>
-                    <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                    <span className="metric-name">{vision[1]}</span>
+                    <span className="metric-score"><span style={{color: "#ff0000"}}>{vision[0]}</span>/100</span>
                   </div>
-                  <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+                  <span className="metric-info">{vision[2]}</span>
                 </div>
               
               )}
@@ -142,10 +168,10 @@ export default function Journal() {
                     <div className="metric-section" key={index}>
 
                       <div>
-                       <span className="metric-name">{goal}</span>
-                       <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                       <span className="metric-name">{goal[1]}</span>
+                       <span className="metric-score"><span style={{color: "#ff0000"}}>{goal[0]}</span>/100</span>
                       </div>
-                      <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+                      <span className="metric-info">{goal[2]}</span>
 
                     </div>
                   )
@@ -162,10 +188,10 @@ export default function Journal() {
                 attributes.filter(attribute => attribute).map((attribute, index) => 
                 <div className="metric-section" key={index}>
                   <div>
-                    <span className="metric-name">{attribute}</span>
-                    <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                    <span className="metric-name">{attribute[1]}</span>
+                    <span className="metric-score"><span style={{color: "#ff0000"}}>{attribute[0]}</span>/100</span>
                   </div>
-                  <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+                  <span className="metric-info">{attribute[2]}</span>
                 </div>)}
             </div>
           )}
