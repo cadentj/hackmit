@@ -71,6 +71,7 @@ export default function Journal() {
       setVisions(response['data']['visions'].map(vision => [0, vision['statement'], vision['status']]));
       setGoals(response['data']['goals'].map(vision => [0, vision['statement'], vision['status']]));
       setAttributes(response['data']['attributes'].map(vision => [0, vision['statement'], vision['status']]));
+      setNewEntry('');
     }
 
     // var entry = 
@@ -82,48 +83,48 @@ export default function Journal() {
   })();
   }, [selectedDate]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        console.log(user.uid);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       // User is signed in
+  //       console.log(user.uid);
   
-        // Now you can set up your metrics listener
-        let remove = getMetricsListener(user.uid, (snapshot) => {
-          const metrics = snapshot.val();
-          if (metrics) {
-            setVisions(metrics.visions);
-            setGoals(metrics.goals);
-            setAttributes(metrics.attributes);
-          }
-        });
+  //       // Now you can set up your metrics listener
+  //       let remove = getMetricsListener(user.uid, (snapshot) => {
+  //         const metrics = snapshot.val();
+  //         if (metrics) {
+  //           setVisions(metrics.visions);
+  //           setGoals(metrics.goals);
+  //           setAttributes(metrics.attributes);
+  //         }
+  //       });
   
-        // Cleanup function to unsubscribe from the metrics listener when the component unmounts
-        return () => remove();
-      } else {
-        // User is signed out
-        console.log("User is not signed in.");
-      }
-    });
+  //       // Cleanup function to unsubscribe from the metrics listener when the component unmounts
+  //       return () => remove();
+  //     } else {
+  //       // User is signed out
+  //       console.log("User is not signed in.");
+  //     }
+  //   });
   
-    // Cleanup function to unsubscribe from the auth state listener when the component unmounts
-    return () => unsubscribe();
-  }, []);
+  //   // Cleanup function to unsubscribe from the auth state listener when the component unmounts
+  //   return () => unsubscribe();
+  // }, []);
   
 
-  useEffect(() => {
-    // Save to localStorage
-    localStorage.setItem('journalEntries', JSON.stringify(entries));
-    localStorage.setItem('visions', JSON.stringify(visions));
-    localStorage.setItem('goals', JSON.stringify(goals));
-    localStorage.setItem('attributes', JSON.stringify(attributes));
-  }, [entries, visions, goals, attributes]);
+  // useEffect(() => {
+  //   // Save to localStorage
+  //   localStorage.setItem('journalEntries', JSON.stringify(entries));
+  //   localStorage.setItem('visions', JSON.stringify(visions));
+  //   localStorage.setItem('goals', JSON.stringify(goals));
+  //   localStorage.setItem('attributes', JSON.stringify(attributes));
+  // }, [entries, visions, goals, attributes]);
 
   
 
   const handleDateChange = async (date) => {
     setSelectedDate(date);
-    setNewEntry(entries[date.toDateString()] || '');
+    // setNewEntry(entries[date.toDateString()] || '');
   };
 
   const handleSaveEntry = async () => {
@@ -139,8 +140,23 @@ export default function Journal() {
       'date': selectedDate.toDateString(),
       'entry': newEntry
     }
-    await axios.post('http://localhost:5000/day-entry/', {headers: headers, data: data});
+    var response = await axios.post('http://localhost:5000/day-entry/', {headers: headers, data: data});
+
+    console.log("response", response);
+    console.log(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setVisions(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setGoals(response['data']['goals'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    setAttributes(response['data']['attributes'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    if (response['data']['entry']) {
+      
+      setNewEntry(response['data']['entry'])
+      
+    };
   };
+
+  // useEffect(() => {
+  //   console.log('reload')
+  // }, [newEntry]);
 
   const toggleSection = (section) => {
     if (openSection === section) {
@@ -152,7 +168,7 @@ export default function Journal() {
 
   return (
     <div className="container">
-      <h1><span style={{color: "#D3D3D3"}}>J</span>anus</h1>
+      <h1>Janus</h1>
       <div className="top-section">
         <div className="calendar-section">
           <Calendar className="calendar-font" onChange={handleDateChange} value={selectedDate} />
