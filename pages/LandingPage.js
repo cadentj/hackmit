@@ -35,8 +35,7 @@ const LandingPage = () => {
 
       {/* Right Side */}
       <animated.div style={{ ...rightProps, flex: 1 }}>
-		<br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-		<Image src = {logo} alt="Your Logo" style={{ width: '100%', height: 'auto' }} />
+		<Image src = {logo} alt="Your Logo" style={{ width: '100%', height: 'auto', marginTop: "30%"}} />
       </animated.div>
     </div>
 
