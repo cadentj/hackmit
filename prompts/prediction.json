@@ -1,4 +1,14 @@
 
-        {"progression" : {"vision" : "15", "goal" : "25", "attribute" : "10"}, 
-        "suggestions" : ["Set yourself a goal to finish the coding course in a certain period of time - this will motivate you to stay on track and make regular progress.","Set aside a specific amount of time each day to work on coding, so it becomes a habit.","Visualize your desired outcome and the rewards you will receive from achieving your goal to stay motivated and on track."],
-        "summarization" : "You have taken a positive step today by beginning a coding lesson, even though it was difficult. You have the vision of a beach house and a secure future for your family, and these dreams can help you stay motivated. To ensure progress, set yourself a timeline to finish the coding course, set aside a specific amount of time each day to work on coding, and visualize the rewards you will receive from achieving your goal."}
+        {
+            "progression": {
+                "vision": [score, score, score],
+                "goal": [score, score, score],
+                "attribute": [score, score, score]
+            },
+            "suggestions": [
+                "vision": "suggestion",
+                "goal": "suggestion"
+                "attribute": [score, score, score]
+            ],
+            "summarization": "You have taken a step towards a future goal by beginning a coding lesson, and you have acknowledged the importance of considering the future. However, continuing to party and use substances can be a barrier to achieving your goals. You can improve your progress by setting deadlines, breaking down goals into smaller steps, and finding an accountability partner."
+        }
