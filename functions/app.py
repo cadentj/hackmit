@@ -1,17 +1,22 @@
 import datetime
 import json
 from flask import Flask, request, jsonify, send_from_directory
-app = Flask(__name__)
-from waitress import serve
 
+from waitress import serve
+from flask_cors import CORS, cross_origin
 from firebase_functions import https_fn, db_fn, options
 from firebase_admin import db, initialize_app
 from firebase_admin import credentials
 from prompts.final import Janus
 
 DB_URL = "https://janus-4326f-default-rtdb.firebaseio.com"
-cred = credentials.Certificate("./janus-4326f-62cc9d861e34.json")
+cred = credentials.Certificate("./functions/janus-4326f-62cc9d861e34.json")
 initialize_app(cred, {'databaseURL': DB_URL})
+
+
+app = Flask(__name__)
+CORS(app, supports_credentials=True)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 def extract_statements(statement_list):
     return [it["statement"] for it in statement_list]
@@ -19,6 +24,7 @@ def extract_statements(statement_list):
 
 cat_names = ["goals", "visions", "attributes"]
 @app.route('/day-entry/', methods=['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def day_entry():
     """Create a journal entry for a given day."""
 

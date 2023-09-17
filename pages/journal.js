@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import { writeEntry, writeGva, getDaysListener, getMetricsListener } from './api';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import axios from "axios";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
@@ -37,7 +38,12 @@ export default function Journal() {
     const savedVisions = [localStorage.getItem('vision1'), localStorage.getItem('vision2'), localStorage.getItem('vision3')];
     const savedGoals = [localStorage.getItem('goal1'), localStorage.getItem('goal2'), localStorage.getItem('goal3'), localStorage.getItem('goal4')];
     const savedAttributes = [localStorage.getItem('attribute1'), localStorage.getItem('attribute2'), localStorage.getItem('attribute3'), localStorage.getItem('attribute4')];
-
+    
+    let headers = {
+      'Content-Type': 'application/json',
+      'uid': 1
+    }
+    axios.post('http://127.0.0.1:5000/day-entry', {headers: headers}).then(respone => console.log("metric response", response)).catch(error => console.log("metric error", error));
     if (savedEntries) setEntries(savedEntries);
     if (savedVisions) setVisions(savedVisions);
     if (savedGoals) setGoals(savedGoals);
