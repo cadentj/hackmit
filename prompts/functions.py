@@ -9,11 +9,10 @@ KEY = "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"
 class Janus:
     entries = []
 
-    def __init__(self, visions, goals, attributes, biography):
+    def __init__(self, visions, goals, attributes):
         self.visions = visions
         self.goals = goals
         self.attributes = attributes
-        self.biography = biography 
         self.janus = OpenAI(openai_api_key=KEY)
 
     def progression(self):
@@ -89,9 +88,6 @@ class Janus:
         Attributes: 
         {self.expand(self.attributes)}
 
-        This is the user's biography:
-        {self.biography}
-
         Here are the tasks you will perform:
         {progression}
         {suggestions}
@@ -122,12 +118,11 @@ attributes = [
     "Become more motivated in achieving my goals",
     "Spend less time on instant gratification"
 ]
-biography = "She is a 35 year old woman who studied political science at her local community college. She is now a painter. She struggles, but she's able to make a livable income (40k a year). She parties a lot and often smokes weed and does psychedelics, which significantly affects her productivity. She recently had an awakening when meditating and she realized that she needs to turn her life around. its been hard for her though because she is stuck into so many of her old habits. Many days she gets closer to her goals, on other days she falls back into her old self.exit"
 
 entry = """It's funny how the universe sends you signs. During my meditation, it hit me - I've spent years as a leaf in the wind, blowing wherever life took me. There's beauty in that, sure, but there's a void too, a sense of something lacking. I've spent so much time enjoying the moment without truly considering the future. The partying, the weed, the mdma, all the moments that felt freeing but chained me in the long run.
 Today, I opened up my computer and started a coding lesson. I'd been putting it off forever. I got through an hour, which isn't a lot, but it's a start. My hands felt more at home holding a paintbrush, but the thought of securing a stable future and that dream beach house kept me going. I imagined the sound of waves crashing, my future kids playing in the sand... I want that life."""
 
-janus_1 = Janus(visions, goals, attributes, biography)
+janus_1 = Janus(visions, goals, attributes)
 val = janus_1.converse(entry)
 
 prediction = janus_1.janus.predict(val)
