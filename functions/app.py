@@ -68,12 +68,14 @@ def day_entry():
 
             if type(evaluation['4']) == type(str): 
                 evaluation['4'] = json.loads(evaluation['4'])
+
             user_metrics[cat_str][i]["score"] = evaluation[str(cat_idx + 1)][i]
             # run_avg += int(user_metrics[cat_str][i]["score"])
             # count += 1
             user_metrics[cat_str][i]["status"] = evaluation["4"][cat_str][i]
         # avgs.append(int(run_avg / count))
-
+    print('user_metrics')
+    print(json.dumps(user_metrics,indent=2))
     metrics_ref.set(user_metrics)
 
     ref = db.reference(f"days/{uid}/{date}")

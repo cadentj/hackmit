@@ -5,7 +5,7 @@ from langchain.llms import OpenAI
 import json
 
 
-KEY = "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"
+KEY = "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"
 
 class Janus:
     def __init__(self, visions, goals, attributes):
