@@ -1,0 +1,14 @@
+
+        {
+            "progression": {
+                "vision": [score, score, score],
+                "goal": [score, score, score],
+                "attribute": [score, score, score]
+            },
+            "suggestions": [
+                "vision": "suggestion",
+                "goal": "suggestion"
+                "attribute": [score, score, score]
+            ],
+            "summarization": "You have taken a step towards a future goal by beginning a coding lesson, and you have acknowledged the importance of considering the future. However, continuing to party and use substances can be a barrier to achieving your goals. You can improve your progress by setting deadlines, breaking down goals into smaller steps, and finding an accountability partner."
+        }

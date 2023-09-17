@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import logo from "./januslogo.png";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import logo from './januslogo.png';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -18,27 +18,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const auth = getAuth();
 
   const handleLogin = () => {
     // Handle login logic here
     console.log(`Logging in with email: ${email} and password: ${password}`);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        localStorage.setItem("uid", user.uid);
-        window.location.href = "/start";
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+	createUserWithEmailAndPassword(auth, email, password)
+	.then((userCredential) => {
+		// Signed in 
+		const user = userCredential.user;
+		window.location.href = '/start';
+	})
+	.catch((error) => {
+		const errorCode = error.code;
+		const errorMessage = error.message;
+		console.log(errorMessage);
+	});
   };
+
 
   return (
     <div className="login-container">
@@ -58,17 +58,7 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button
-          onClick={handleLogin}
-          style={{
-            padding: "10px 20px",
-            fontSize: "1em",
-            cursor: "pointer",
-            fontFamily: "myfont",
-          }}
-        >
-          Login
-        </button>
+        <button onClick={handleLogin} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer', fontFamily: 'myfont' }}>Login</button>
       </div>
 
       <style jsx>{`
@@ -94,18 +84,18 @@ export default function LoginPage() {
           padding: 10px;
           width: 200px;
         }
-        button {
-          border: 1px solid black;
-          box-shadow: 3px 3px 3px 0px #888888;
-          margin-top: 10px;
-          padding-left: 10px;
-          cursor: pointer;
-          font-size: 1rem;
-          transition: background-color 0.2s ease;
-        }
-        button:hover {
-          box-shadow: 5px 5px 3px 0px #888888;
-        }
+        button{
+			border:1px solid black;
+			box-shadow: 3px 3px 3px 0px #888888;
+			margin-top: 10px;
+			padding-left: 10px;
+			cursor: pointer;
+			font-size: 1rem;
+			transition: background-color 0.2s ease;
+		  }
+      button:hover {
+        box-shadow: 5px 5px 3px 0px #888888;
+      }
       `}</style>
     </div>
   );
