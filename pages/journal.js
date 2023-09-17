@@ -2,6 +2,22 @@ import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { writeEntry, writeGva, getDaysListener, getMetricsListener } from './api';
+import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
+  authDomain: "janus-4326f.firebaseapp.com",
+  databaseURL: "https://janus-4326f-default-rtdb.firebaseio.com",
+  projectId: "janus-4326f",
+  storageBucket: "janus-4326f.appspot.com",
+  messagingSenderId: "418343874787",
+  appId: "1:418343874787:web:67e43fafabe304a3c8d5d6",
+  measurementId: "G-1ZKGB6YD10",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 export default function Journal() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -13,6 +29,7 @@ export default function Journal() {
 
   //for colalpsible
   const [openSection, setOpenSection] = useState(null);
+  const user = auth.currentUser;
 
   useEffect(() => {
     // Load from localStorage
@@ -26,6 +43,19 @@ export default function Journal() {
     if (savedGoals) setGoals(savedGoals);
     if (savedAttributes) setAttributes(savedAttributes);
   }, []);
+
+  useEffect(() => {
+    remove = getMetricsListener(user.uid, (snapshot) => { 
+      const metrics = snapshot.val();
+      if (metrics) {
+        setVisions(metrics.visions);
+        setGoals(metrics.goals);
+        setAttributes(metrics.attributes);
+      }
+    })
+
+    return () => remove()
+  }, [])
 
   useEffect(() => {
     // Save to localStorage

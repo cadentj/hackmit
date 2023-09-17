@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth } from "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
@@ -17,6 +19,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const functions = getFunctions(app);
 const db = getDatabase();
+const auth = getAuth();
+
 
 export const writeEntry = async (content) => {
   const addEntry = httpsCallable(functions, "day_entry");
@@ -24,6 +28,8 @@ export const writeEntry = async (content) => {
 };
 
 export const writeGva = async (goals, visions, attributes) => {
+  const user = auth.currentUser;
+  console.log(user.uid)
   const addGva = httpsCallable(functions, "set_gva");
   return addGva({ goals, visions, attributes });
 };

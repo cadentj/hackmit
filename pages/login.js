@@ -1,16 +1,44 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import logo from './januslogo.png';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
+  authDomain: "janus-4326f.firebaseapp.com",
+  databaseURL: "https://janus-4326f-default-rtdb.firebaseio.com",
+  projectId: "janus-4326f",
+  storageBucket: "janus-4326f.appspot.com",
+  messagingSenderId: "418343874787",
+  appId: "1:418343874787:web:67e43fafabe304a3c8d5d6",
+  measurementId: "G-1ZKGB6YD10",
+};
+
+const app = initializeApp(firebaseConfig);
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const auth = getAuth();
+
   const handleLogin = () => {
     // Handle login logic here
     console.log(`Logging in with email: ${email} and password: ${password}`);
-	window.location.href = '/start';
+	createUserWithEmailAndPassword(auth, email, password)
+	.then((userCredential) => {
+		// Signed in 
+		const user = userCredential.user;
+		window.location.href = '/start';
+	})
+	.catch((error) => {
+		const errorCode = error.code;
+		const errorMessage = error.message;
+		console.log(errorMessage);
+	});
   };
+
 
   return (
     <div className="login-container">
