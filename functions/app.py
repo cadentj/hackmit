@@ -6,7 +6,7 @@ import json
 from waitress import serve
 from flask_cors import CORS, cross_origin
 from firebase_functions import https_fn, db_fn, options
-
+import json
 from firebase_admin import db, initialize_app
 from firebase_admin import credentials
 from prompts.final import Janus
@@ -25,7 +25,6 @@ def extract_statements(statement_list):
 
 
 cat_names = ["goals", "visions", "attributes"]
-
 
 @app.route('/day-entry/', methods=['GET', 'POST'])
 @cross_origin(supports_credentials=True)
@@ -51,23 +50,36 @@ def day_entry():
     evaluation = jns.evaluate(request.json['data']["entry"])
 
     avgs = []
+    print("user metrics", json.dumps(user_metrics, indent=2))
     for cat_idx, cat_str in enumerate(list(user_metrics.keys())):
-        run_avg = 0
+        # run_avg = 0
         count = 0
         for i in range(len(user_metrics[cat_str])):
+
+            if type(evaluation[str(cat_idx + 1)]) == type(list):
+                pass
+            elif type(evaluation[str(cat_idx + 1)]) == type(str):
+                if '[' in evaluation[str(cat_idx + 1)]:
+                    evaluation[str(cat_idx + 1)] = eval(evaluation[str(cat_idx + 1)])
+                else:
+                    evaluation[str(cat_idx + 1)] = [int(x) for x in evaluation[str(cat_idx + 1)].split(',')]
+
+            print("evaluation[str(cat_idx + 1)]", evaluation[str(cat_idx + 1)])
+
+            if type(evaluation['4']) == type(str): 
+                evaluation['4'] = json.loads(evaluation['4'])
             user_metrics[cat_str][i]["score"] = evaluation[str(cat_idx + 1)][i]
-            run_avg += user_metrics[cat_str][i]["score"]
-            count += 1
+            # run_avg += int(user_metrics[cat_str][i]["score"])
+            # count += 1
             user_metrics[cat_str][i]["status"] = evaluation["4"][cat_str][i]
-        avgs.append(int(run_avg / count))
+        # avgs.append(int(run_avg / count))
 
     metrics_ref.set(user_metrics)
 
     ref = db.reference(f"days/{uid}/{date}")
     ref.set(({"entry": request.json['data']["entry"],
-              "goal_rating": avgs[0],
-              "vision_rating": avgs[1],
-              "att_rating": avgs[2]}))
+              **user_metrics
+              }))
     return jsonify(user_metrics)
 
 
@@ -82,10 +94,20 @@ def read_metrics(uid):
     return jsonify(ret)
 
 
-@app.route('/read-days/', methods=['GET', 'POST'])
-def read_days():
-    uid = request.json["uid"]
+@app.route('/all-data/', methods=['GET', 'POST'])
+def read_all_data():
+    uid = request.json['data']["uid"]
     return jsonify(db.reference(f"days/{uid}").get())
+
+
+@app.route('/read-days/', methods=['POST'])
+def read_days():
+    uid = request.json['data']["uid"]
+    date = request.json['data']["date"]
+    print(request.json)
+    # ref = db.reference(f"days/{uid}/{date}")
+
+    return jsonify(db.reference(f"days/{uid}/{date}").get())
 
 
 if __name__ == '__main__':

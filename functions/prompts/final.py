@@ -5,7 +5,7 @@ from langchain.llms import OpenAI
 import json
 
 
-KEY = "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"
+KEY = "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"
 
 class Janus:
     def __init__(self, visions, goals, attributes):
@@ -89,6 +89,8 @@ class Janus:
     def evaluate(self, entry):
         prompt = self.initialize(entry)
         eval = self.janus.predict(prompt)
+
+        print("eval in final.py", eval)
         return json.loads(eval)
 
 

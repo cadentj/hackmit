@@ -46,20 +46,41 @@ export default function Journal() {
 
       // 'uid': 1
     }
-    var response = await axios.get('http://localhost:5000/read-metrics/YzcjzTXLDGWaqLcwnufjL1EnvPs2', {headers: headers})
-    console.log("response", response);
-    console.log(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
-    setVisions(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
-    setGoals(response['data']['goals'].map(vision => [vision['score'], vision['statement'], vision['status']]));
-    setAttributes(response['data']['attributes'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+    let data = {
+      'uid': 'fPsWYBPILmTZy2w8fP4Xc4gnl9B3',
+      'date': selectedDate.toDateString()
+    }
+    console.log('selectedDate', selectedDate.toDateString());
+    var response = await axios.post('http://localhost:5000/read-days/', { data: data})
+   
 
+    if (response['data']) {
+      console.log("response", response);
+      console.log(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+      setVisions(response['data']['visions'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+      setGoals(response['data']['goals'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+      setAttributes(response['data']['attributes'].map(vision => [vision['score'], vision['statement'], vision['status']]));
+      if (response['data']['entry']) {
+        
+        setNewEntry(response['data']['entry'])
+        
+      };
+    } else {
+      var response = await axios.get('http://localhost:5000/read-metrics/fPsWYBPILmTZy2w8fP4Xc4gnl9B3', { data: data})
+
+      setVisions(response['data']['visions'].map(vision => [0, vision['statement'], vision['status']]));
+      setGoals(response['data']['goals'].map(vision => [0, vision['statement'], vision['status']]));
+      setAttributes(response['data']['attributes'].map(vision => [0, vision['statement'], vision['status']]));
+    }
+
+    // var entry = 
     // var data = {"attributes": {}, }
     // if (savedEntries) setEntries(savedEntries);
     // if (savedVisions) setVisions(response['data']['visions']);
     // if (savedGoals) setGoals(savedGoals);
     // if (savedAttributes) setAttributes(savedAttributes);
   })();
-  }, []);
+  }, [selectedDate]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -114,7 +135,7 @@ export default function Journal() {
       'Accept': 'application/json',
     }
     var data = {
-      'uid': 'YzcjzTXLDGWaqLcwnufjL1EnvPs2',
+      'uid': 'fPsWYBPILmTZy2w8fP4Xc4gnl9B3',
       'date': selectedDate.toDateString(),
       'entry': newEntry
     }
