@@ -60,42 +60,59 @@ export default function Journal() {
       <div className="top-section">
         <div className="calendar-section">
           <Calendar onChange={handleDateChange} value={selectedDate} />
+        </div>
+        <div>
+          <h2>Your Personal Metrics</h2>
 
-        <h2>Your Personal Goals</h2>
-        <div className="dropdown-section">
-          <h3 onClick={() => toggleSection('visions')}>Visions {openSection === 'visions' ? '-' : '+'}</h3>
-          {openSection === 'visions' && (
-            <ul>
-              {visions.filter(vision => vision).map((vision, index) => <li key={index}>{vision}</li>)}
-            </ul>
-          )}
-        </div>
-        <div className="dropdown-section">
-          <h3 onClick={() => toggleSection('goals')}>Goals {openSection === 'goals' ? '-' : '+'}</h3>
+          <div className="dropdown-section">
+            <p onClick={() => toggleSection('visions')}>visions {openSection === 'visions' ? '-' : '+'}</p>
+            {openSection === 'visions' && (
+              <ul>
+                {visions.filter(vision => vision).map((vision, index) => <li key={index}>{vision}</li>)}
+              </ul>
+            )}
+          </div>
+          <div className="dropdown-section">
+            <p onClick={() => toggleSection('goals')}>goals {openSection === 'goals' ? '-' : '+'}</p>
+          </div>
           {openSection === 'goals' && (
-            <ul>
-              {goals.filter(goal => goal).map((goal, index) => <li key={index}>{goal}</li>)}
-            </ul>
-          )}
+              <div>
+                { 
+                  goals.filter(goal => goal).map((goal, index) => 
+                  
+                  // <div>
+                    <div className="metric-section" key={index}>
+                      <span class="metric-name">{goal}</span>
+                      <span class="metric-info">some test info about your metric </span>
+                    </div>
+
+                  
+                  )
+                }
+              </div>
+            )}
+          <div className="dropdown-section">
+            <p onClick={() => toggleSection('attributes')}>attributes {openSection === 'attributes' ? '-' : '+'}</p>
+            {openSection === 'attributes' && (
+              <ul>
+                {attributes.filter(attribute => attribute).map((attribute, index) => <li key={index}>{attribute}</li>)}
+              </ul>
+            )}
+          </div>
         </div>
-        <div className="dropdown-section">
-          <h3 onClick={() => toggleSection('attributes')}>Attributes {openSection === 'attributes' ? '-' : '+'}</h3>
-          {openSection === 'attributes' && (
-            <ul>
-              {attributes.filter(attribute => attribute).map((attribute, index) => <li key={index}>{attribute}</li>)}
-            </ul>
-          )}
-        </div>
-      </div>
       </div>
       <div className="entry-section">
         <h2>Journal Entry for {selectedDate.toDateString()}</h2>
-        <textarea
-          placeholder="What's on your mind today?"
-          value={newEntry}
-          onChange={(e) => setNewEntry(e.target.value)}
-        ></textarea>
-        <button onClick={handleSaveEntry} style={{fontFamily: 'myfont'}}>Save Entry</button>
+
+        {/* <div className="entry-input">  */}
+          <textarea className="entry-input"
+            placeholder="please tell me everything that you did today"
+            value={newEntry}
+            onChange={(e) => setNewEntry(e.target.value)}
+          ></textarea>
+          <button onClick={handleSaveEntry} style={{fontFamily: 'myfont'}}>save entry</button>
+        {/* </div> */}
+        
       </div>
       <style jsx>{`
         .container {
@@ -115,17 +132,42 @@ export default function Journal() {
         .entry-section {
           margin-top: 40px;
         }
+        .dropdown-section {
+          margin-top: 10px;
+          padding-left: 10px;
+        }
+        // general box styling section
+        .entry-input, .dropdown-section, button, .metric-section {
+          border:1px solid black;
+          box-shadow: 3px 3px 3px 0px #888888;
+        }
+        .metric-section {
+          padding: 5px 5px 5px 5px;
+          margin: 5px 0px 5px 10px;
+        }
+        .metric-section .metric-info {
+          display: none;
+        }
+        .metric-section:hover .metric-name {
+          display: none;
+        }
+        .metric-section:hover .metric-info {
+          display: inline;
+        }
+        .dropdown-section:hover, textarea:hover, button:hover {
+          box-shadow: 5px 5px 3px 0px #888888;
+        }
         textarea {
           width: 100%;
           height: 150px;
+          resize: none;
+          outline: none;
         }
         button {
           padding: 12px 24px;
-          background-color: #0070f3;
-          color: white;
-          border: none;
-          border-radius: 4px;
+          // color: rgb(114,117,165);
           cursor: pointer;
+          padding-left: 10px;
         }
         h3 {
           cursor: pointer;
