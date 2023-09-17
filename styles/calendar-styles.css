@@ -1,31 +1,57 @@
 /* Override the calendar tile background and text color */
+.react-calendar {
+  width: 350px;
+  max-width: 100%;
+  background: white;
+  border: 1px solid #a0a096;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  line-height: 1.125em;
+  font-family: 'myfont' !important;
+}
+
+.calendar-font {
+  font-family: 'myfont' !important;
+}
+
 .react-calendar__tile {
-	background: #f9f9f9;
-	color: #333;
-  }
-  
-  /* Style the selected date */
-  .react-calendar__tile--active {
-	background: #0070f3;
-	color: white;
-  }
-  
-  /* Style the current date */
-  .react-calendar__tile--now {
-	background: #ccc;
-	color: white;
-  }
-  
-  /* Style the calendar navigation buttons */
-  .react-calendar__navigation button {
-	background: none;
-	color: #333;
-	font-size: 1.2em;
-  }
-  
-  /* Style the calendar labels */
-  .react-calendar__month-view__days__day--weekend,
-  .react-calendar__month-view__weekdays__weekday {
-	color: #666;
-  }
-  
+  background: #f9f9f9;
+  color: #333;
+  font-family: 'myfont' !important;
+}
+
+.react-calendar__tile--now {
+  background: #F7E2DD !important;
+}
+
+.react-calendar__tile--active {
+  background: #6A7986 !important;
+  font-family: 'myfont' !important;
+  color: white !important;
+}
+
+
+.react-calendar__month-view__days__day--weekend {
+  color: #333 !important;
+}
+
+/* Style the current date */
+.react-calendar__tile--now {
+  background: #ccc;
+  font-family: 'myfont' !important;
+  color: white;
+}
+
+/* Style the calendar navigation buttons */
+.react-calendar__navigation button {
+  background: none;
+  color: #333;
+  font-family: 'myfont' !important;
+  font-size: 1.1em;
+}
+
+/* Style the calendar labels */
+.react-calendar__month-view__days__day--weekend,
+.react-calendar__month-view__weekdays__weekday {
+  color: #666;
+  font-family: 'myfont' !important;
+}
