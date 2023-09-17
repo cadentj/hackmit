@@ -59,19 +59,30 @@ export default function Journal() {
       <h1>Janus</h1>
       <div className="top-section">
         <div className="calendar-section">
-          <Calendar onChange={handleDateChange} value={selectedDate} />
+          <Calendar className="calendar-font" onChange={handleDateChange} value={selectedDate} />
         </div>
-        <div>
+        <div className="metric-container">
           <h2>Your Personal Metrics</h2>
 
           <div className="dropdown-section">
             <p onClick={() => toggleSection('visions')}>visions {openSection === 'visions' ? '-' : '+'}</p>
-            {openSection === 'visions' && (
-              <ul>
-                {visions.filter(vision => vision).map((vision, index) => <li key={index}>{vision}</li>)}
-              </ul>
-            )}
           </div>
+          
+            {openSection === 'visions' && (
+              <div>
+                {visions.filter(vision => vision).map((vision, index) => 
+                
+                <div className="metric-section" key={index}>
+                  <div>
+                    <span className="metric-name">{vision}</span>
+                    <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                  </div>
+                  <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+                </div>
+              
+              )}
+              </div>
+            )}
           <div className="dropdown-section">
             <p onClick={() => toggleSection('goals')}>goals {openSection === 'goals' ? '-' : '+'}</p>
           </div>
@@ -79,26 +90,36 @@ export default function Journal() {
               <div>
                 { 
                   goals.filter(goal => goal).map((goal, index) => 
-                  
-                  // <div>
                     <div className="metric-section" key={index}>
-                      <span className="metric-name">{goal}</span>
-                      <span className="metric-info">some test info about your metric </span>
-                    </div>
 
-                  
+                      <div>
+                       <span className="metric-name">{goal}</span>
+                       <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                      </div>
+                      <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+
+                    </div>
                   )
                 }
               </div>
             )}
           <div className="dropdown-section">
             <p onClick={() => toggleSection('attributes')}>attributes {openSection === 'attributes' ? '-' : '+'}</p>
-            {openSection === 'attributes' && (
-              <ul>
-                {attributes.filter(attribute => attribute).map((attribute, index) => <li key={index}>{attribute}</li>)}
-              </ul>
-            )}
           </div>
+          
+          {openSection === 'attributes' && (
+            <div>
+              {
+                attributes.filter(attribute => attribute).map((attribute, index) => 
+                <div className="metric-section" key={index}>
+                  <div>
+                    <span className="metric-name">{attribute}</span>
+                    <span className="metric-score"><span style={{color: "#ff0000"}}>55</span>/100</span>
+                  </div>
+                  <span className="metric-info">some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric some test info about your metric </span>
+                </div>)}
+            </div>
+          )}
         </div>
       </div>
       <div className="entry-section">
@@ -124,7 +145,12 @@ export default function Journal() {
           display: flex;
           justify-content: space-between;
         }
-        .calendar-section,
+        .calendar-section {
+          color: white;
+        }
+        .calendar-font {
+          font-family: 'myfont' !important;
+        }
         .goals-section {
           flex: 1;
           margin: 0 10px;
@@ -144,15 +170,29 @@ export default function Journal() {
         .metric-section {
           padding: 5px 5px 5px 5px;
           margin: 5px 0px 5px 10px;
+          flex-direction: column;
         }
-        .metric-section .metric-info {
+        .metric-container {
+          width: 35%;
+        }
+        .metric-info {
           display: none;
+          transition: all .3s ease;
+          overflow: hidden;
         }
         .metric-section:hover .metric-name {
           display: none;
         }
         .metric-section:hover .metric-info {
           display: inline;
+          transition: height 10s ease-out;
+
+        }
+        .metric-section:hover .metric-score {
+          display:none;
+        }
+        .metric-score {
+          float: right;
         }
         .dropdown-section:hover, textarea:hover, button:hover {
           box-shadow: 5px 5px 3px 0px #888888;
