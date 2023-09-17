@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { writeEntry, writeGva, getDaysListener, getMetricsListener } from './api';
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -45,17 +45,33 @@ export default function Journal() {
   }, []);
 
   useEffect(() => {
-    remove = getMetricsListener(user.uid, (snapshot) => { 
-      const metrics = snapshot.val();
-      if (metrics) {
-        setVisions(metrics.visions);
-        setGoals(metrics.goals);
-        setAttributes(metrics.attributes);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        console.log(user.uid);
+  
+        // Now you can set up your metrics listener
+        let remove = getMetricsListener(user.uid, (snapshot) => {
+          const metrics = snapshot.val();
+          if (metrics) {
+            setVisions(metrics.visions);
+            setGoals(metrics.goals);
+            setAttributes(metrics.attributes);
+          }
+        });
+  
+        // Cleanup function to unsubscribe from the metrics listener when the component unmounts
+        return () => remove();
+      } else {
+        // User is signed out
+        console.log("User is not signed in.");
       }
-    })
-
-    return () => remove()
-  }, [])
+    });
+  
+    // Cleanup function to unsubscribe from the auth state listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
+  
 
   useEffect(() => {
     // Save to localStorage

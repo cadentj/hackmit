@@ -3,7 +3,6 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyA8M_Mu6U-LObR2JObJ8ooAXHXxX49zN9U",
   authDomain: "janus-4326f.firebaseapp.com",
