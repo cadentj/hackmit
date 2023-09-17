@@ -105,7 +105,7 @@ export default function Journal() {
 
   return (
     <div className="container">
-      <h1>Janus</h1>
+      <h1><span style={{fontSize: "50%"}}>J</span>anus</h1>
       <div className="top-section">
         <div className="calendar-section">
           <Calendar className="calendar-font" onChange={handleDateChange} value={selectedDate} />
@@ -175,7 +175,8 @@ export default function Journal() {
         <h2>Journal Entry for {selectedDate.toDateString()}</h2>
 
         {/* <div className="entry-input">  */}
-          <textarea className="entry-input"
+          <textarea className="entry-input" 
+            style={{paddingLeft:"10px", paddingTop:"10px", boxSizing:"border-box"}}
             placeholder="please tell me everything that you did today"
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
