@@ -105,7 +105,7 @@ export default function Journal() {
 
   return (
     <div className="container">
-      <h1><span style={{fontSize: "50%"}}>J</span>anus</h1>
+      <h1><span style={{color: "#D3D3D3"}}>J</span>anus</h1>
       <div className="top-section">
         <div className="calendar-section">
           <Calendar className="calendar-font" onChange={handleDateChange} value={selectedDate} />
@@ -181,7 +181,7 @@ export default function Journal() {
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
           ></textarea>
-          <button onClick={handleSaveEntry} style={{fontFamily: 'myfont'}}>save entry</button>
+          <button onClick={handleSaveEntry} style={{fontFamily: 'myfont', paddingLeft: '20px'}}>save entry</button>
         {/* </div> */}
         
       </div>
