@@ -1,22 +1,13 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@font-face {
+  font-family: 'myfont';
+  src: url('/myfont.otf') format('opentype');
+}
 
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    Segoe UI,
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    Fira Sans,
-    Droid Sans,
-    Helvetica Neue,
-    sans-serif;
+  font-family: 'myfont', sans-serif;
 }
 
 a {
@@ -32,3 +23,5 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+

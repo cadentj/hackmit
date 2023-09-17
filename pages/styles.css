@@ -1,0 +1,17 @@
+@font-face {
+	font-family: 'myfont';
+	src: url('/myfont.otf') format('opentype');
+  }
+  
+  html,
+  body {
+	padding: 0;
+	margin: 0;
+	font-family: 'myfont', sans-serif;
+  }
+  input{
+	font-family: 'myfont', sans-serif;
+  }
+  input::placeholder{
+	font-family: 'myfont', sans-serif;
+  }
