@@ -3,11 +3,24 @@ import os
 import openai
 from langchain.llms import OpenAI
 
+from datetime import datetime
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import OpenAI
+from langchain.memory import VectorStoreRetrieverMemory
+from langchain.chains import ConversationChain
+from langchain.prompts import PromptTemplate
+
+import faiss
+
+from langchain.docstore import InMemoryDocstore
+from langchain.vectorstores import FAISS
 
 KEY = "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"
 
 class Janus:
-    entries = []
+    embedding_size = 1536 # Dimensions of the OpenAIEmbeddings
+    index = faiss.IndexFlatL2(embedding_size)
+    embedding_fn = OpenAIEmbeddings().embed_query
 
     def __init__(self, visions, goals, attributes, biography):
         self.visions = visions
@@ -15,18 +28,22 @@ class Janus:
         self.attributes = attributes
         self.biography = biography 
         self.janus = OpenAI(openai_api_key=KEY)
+        self.vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
+
+    def set_entries(self, entries):
+        self.entries = entries
+
 
     def progression(self):
         progression_prompt = """
-        ================================
         **Task one is progression.**
         
-        Evaluate the progression towards each attribute, goal, and vision in the journal entry on a scale from 1 to 100. 
-        - A score around 1 indicates no progress. In fact, as per the defined aspirations, the user may have regressed.
-        - A score around 100 indicates that the user has made significant progress or reached an aspiration. It is excedingly rare for a user to reach a score of 100 for a vision.
-        - A score around 50 means the user has attempted progress towards their aspiration, but has not made important progress. 
-        Scores between these three numbers should be determined based on effort. Don't just give 1, 50, or 100, but consider the effort the user has put in. You should increment by 5s or 10s or even 1s to give users as accurate and informative of a score as possible.
-        Your answer should be a json formatted as {"progression" : {"vision" : "vision_score", "goal" : "goal_score", "attribute" : "attribute_score"}}. Remember, these scores should be dynamic and accurate and informative. 
+        Evaluate the progression in the journal entry on a scale from 1 to 100. 
+        - A score of 1 indicates no progress towards goals/visions. In fact, as per the defined attributes, the user may have regressed.
+        - A score of 100 indicates that the user has made significant progress or completed a goal/visions. 
+        - A score of 50 percent means the user has attempted progress towards their goals/visions, but has not made progress.
+        Scores between these three percentages should be determined based on attributes. If a user is making correct steps towards a goal,
+        they have a higher score. 
         """
         return progression_prompt
 
@@ -36,7 +53,6 @@ class Janus:
         
         First provide two to three sentences that summarize whether the user is on track to meet their goals.
         Then, provide two to three suggestions for how they can improve my progress towards their goals.
-        Return the suggestions in a json formatted as {"suggestions" : ["suggestion_one", "suggestion_two", "suggesion_three"]}.
         """
         return suggestions_prompt
 
@@ -44,43 +60,58 @@ class Janus:
         return entries[-days:]
 
     def summarize(self, weekly = False):
-        # if (weekly) :
-        #     entries = get_past_entries()
-        #     summary_prompt = f"""
-        #     **Task three is summarization.**
+        if (weekly) :
+            entries = get_past_entries()
+            summary_prompt = f"""
+            **Task three is summarization.**
             
-        #     Summarize the following entries. 
+            Summarize the following entries. 
 
-        #     {entries}"""
-        # else :
-        #     summary_prompt = ""
+            {entries}"""
+        else :
+            summary_prompt = ""
 
-        summarization_prompt = """
-        **Task three is summarization.**
-
-        Summarize the following entries.
-        ================================
-        """
-
-        return summarization_prompt
+        return summary_prompt
 
     def expand(self, compressed):
         expanded_str = ""
-        for i, sentence in enumerate(compressed):
-            expanded_str += f"{i + 1} " + sentence + "\n"
+        for i in compressed:
+            expanded_str += "- " + i + "\n"
         return expanded_str
 
+    def create_memory(self, k=3):
+        # In actual usage, you would set `k` to be a higher value, but we use k=1 to show that
+        # the vector lookup still returns the semantically relevant information
+        retriever = self.vectorstore.as_retriever(search_kwargs=dict(k=1))
+        return VectorStoreRetrieverMemory(retriever=retriever)
+
+
+
+    def converse(self):
+        memory = self.create_memory()
+
+
+            
+
+        # When added to an agent, the memory object can save pertinent information from conversations or used tools
+        memory.save_context({"input": "My favorite food is pizza"}, {"output": "that's good to know"})
+        memory.save_context({"input": "My favorite sport is soccer"}, {"output": "..."})
+        memory.save_context({"input": "I don't the Celtics"}, {"output": "ok"}) #
+
+
+
+
     def converse(self, entry, weekly=False):
-        progression, suggestions, summary = self.progression(), self.suggestions(), self.summarize(weekly)
+        progression, suggestions, summary = self.progression(), self.suggestions(), "placeholder\n"
 
         TEMPLATE = f"""
         You are Janus, an application that evaluates user journal entries. Your primary goal is to provide constructive feedback for users
         to optimize their daily life based on defined goals, visions, and attributes.
 
-        Relevant Information: 
-
-        Below are the user's visions, goals, and attributes. Attributes characterize how user's would like to achieve goals. Goals are stepping stones for
-        visions, which are ultimate long term goals. Refer to the three categories (visions, goals, attributes) as "aspirations".
+        Relevant Information:
+        
+        These are the user's visions, goals, and attributes. Attributes characterize how user's would like to achieve goals. User goals are stepping stones for
+        visions, which are ultimate aspirations.
 
         Visions: 
         {self.expand(self.visions)}
@@ -96,7 +127,7 @@ class Janus:
         {progression}
         {suggestions}
         {summary}
-        Return your answers in a json {{"task_name" : "your_answer"}}. The json should use double quotes " for strings. The json should be raw without any newlines or formatting. Your answers should speak to the user using "you", etc. The journal entries are below. Make sure to complete your response and do not return an incomplete JSON.
+        Return your answers in a json with "task":"answer". Your answers should speak to the user using "you", etc. The journal entries are below. 
 
         {entry}
         """
@@ -128,9 +159,4 @@ entry = """It's funny how the universe sends you signs. During my meditation, it
 Today, I opened up my computer and started a coding lesson. I'd been putting it off forever. I got through an hour, which isn't a lot, but it's a start. My hands felt more at home holding a paintbrush, but the thought of securing a stable future and that dream beach house kept me going. I imagined the sound of waves crashing, my future kids playing in the sand... I want that life."""
 
 janus_1 = Janus(visions, goals, attributes, biography)
-val = janus_1.converse(entry)
-
-prediction = janus_1.janus.predict(val)
-
-python_dict = json.loads(prediction)
-python_dict
+print(janus_1.converse(entry, weekly=False))
