@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFunctions } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { getDatabase, ref, onValue } from "firebase/database";
 
 const firebaseConfig = {

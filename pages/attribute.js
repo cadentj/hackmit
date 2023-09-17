@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { writeGva } from './api';
 
 const Attributes = () => {
   const [attribute1, setAttribute1] = useState('');

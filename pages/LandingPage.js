@@ -20,7 +20,7 @@ const LandingPage = () => {
   });
 
   const startJourney = () => {
-	window.location.href = '/start';
+	window.location.href = '/login';
   };
 
   return (
